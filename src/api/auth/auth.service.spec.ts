@@ -31,8 +31,7 @@ describe('AuthService', () => {
     it('should not extract id when token is not provided', () => {
       const result = AuthService.instance.extractIdFromToken(undefined)
 
-      // expect(result).toStrictEqual(E.left<CustomError>({ message: 'Token is not provided!' }))
-      expect(E.isRight(result)).toBeTruthy()
+      expect(result).toStrictEqual(E.left<CustomError>({ message: 'Token is not provided!' }))
     })
 
     it('should not extract id when token is not correct', () => {
