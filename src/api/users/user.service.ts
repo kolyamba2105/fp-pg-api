@@ -4,9 +4,9 @@ import { genSalt, hash } from 'bcrypt'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as A from 'fp-ts/lib/ReadonlyArray'
-import * as M from 'fp-ts/lib/ReadonlyMap'
 import * as T from 'fp-ts/lib/Task'
 import * as TE from 'fp-ts/lib/TaskEither'
+import { Map } from 'immutable'
 import { CustomError } from 'utils'
 
 export default class UserService {
@@ -33,12 +33,10 @@ export default class UserService {
     )
   }
 
-  getUsers(): TE.TaskEither<CustomError, ReadonlyMap<number, User>> {
-    const toUsersMap = (users: ReadonlyArray<User>): ReadonlyMap<number, User> =>
-      pipe(
-        new Map(A.map((user: User): [number, User] => [user.id, user])(users)),
-        M.fromMap,
-      )
+  getUsers(): TE.TaskEither<CustomError, Map<number, User>> {
+    const toUsersMap = (users: ReadonlyArray<User>): Map<number, User> => Map<number, User>(
+      A.map((user: User): [number, User] => [user.id, user])(users)
+    )
 
     return pipe(
       UserRepository.instance.getAll(),

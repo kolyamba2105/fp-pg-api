@@ -6,6 +6,7 @@ import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as T from 'fp-ts/lib/Task'
 import * as TE from 'fp-ts/lib/TaskEither'
+import { Map } from 'immutable'
 import { CustomError, EndpointResult, isIdValid, sendResponse, sendStatus, StatusCode } from 'utils'
 
 export default class UserController {
@@ -25,7 +26,7 @@ export default class UserController {
   getUsers(_: Request, response: Response): EndpointResult {
     return pipe(
       UserService.instance.getUsers(),
-      TE.map(sendResponse<ReadonlyMap<number, User>>(response)(StatusCode.OK)),
+      TE.map(sendResponse<Map<number, User>>(response)(StatusCode.OK)),
       TE.mapLeft(sendResponse<CustomError>(response)(StatusCode.BadRequest)),
       TE.fold(T.of, T.of),
     )()
