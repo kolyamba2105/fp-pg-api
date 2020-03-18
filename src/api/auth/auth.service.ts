@@ -36,7 +36,7 @@ export default class AuthService {
   }
 
   private static generateToken(user: User): string {
-    return sign({ id: user.id, email: user.email }, credentials.auth.secretOrPrivateKey)
+    return sign({ id: user.id, email: user.email }, credentials.secretOrPrivateKey)
   }
 
   authenticate(payload: AuthCredentials): TE.TaskEither<CustomError, Token> {

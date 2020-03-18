@@ -8,6 +8,6 @@
   "watch": [
     "./src"
   ],
-  "exec": "NODE_PATH=./src ts-node ./src/app.ts",
+  "exec": "NODE_PATH=src ts-node ./src/app.ts",
   "ext": "ts"
 }
