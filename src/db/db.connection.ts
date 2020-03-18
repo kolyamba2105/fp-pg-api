@@ -1,30 +1,28 @@
-import credentials, { Environment } from 'credentials'
+import credentials from 'credentials'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as T from 'fp-ts/lib/Task'
 import * as TE from 'fp-ts/lib/TaskEither'
 import { Sequelize } from 'sequelize'
 import { CustomError, toError } from 'utils'
 
-type Options = Readonly<{
-  database: string,
-  username: string,
-}>
+type Options = typeof credentials.postgres
 
-const getSequelizeInstance = ({ database, username }: Options): Sequelize => new Sequelize({
+const getSequelizeInstance = ({ database, username, password }: Options): Sequelize => new Sequelize({
   database,
   username,
-  host: 'localhost',
+  password,
+  // Use 'postgres' when running with docker-compose
+  host: 'postgres',
   dialect: 'postgres',
   logging: false,
 })
 
-const getDatabaseName = (environment: Environment): string => environment === 'dev'
-  ? credentials.database.devDatabase
-  : credentials.database.testDatabase
+const { postgres: { database, username, password } } = credentials
 
 const options: Options = {
-  database: getDatabaseName(credentials.environment),
-  username: credentials.database.username,
+  database,
+  username,
+  password,
 }
 
 export const sequelize = getSequelizeInstance(options)
