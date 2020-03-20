@@ -3,6 +3,7 @@ build
 
 .idea
 .vscode
+.serverless
 
 .env
 .env.local

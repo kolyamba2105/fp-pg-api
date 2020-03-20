@@ -5,12 +5,18 @@ import * as TE from 'fp-ts/lib/TaskEither'
 import { Sequelize } from 'sequelize'
 import { CustomError, toError } from 'utils'
 
-const getSequelizeInstance = (url: string): Sequelize => new Sequelize(url, {
-  dialect: 'postgres',
+type Options = typeof credentials.database
+
+const getSequelizeInstance = ({ database, host, password, username }: Options): Sequelize => new Sequelize({
+  database,
+  dialect: 'mysql',
+  host,
   logging: false,
+  password,
+  username,
 })
 
-export const sequelize = getSequelizeInstance(credentials.url)
+export const sequelize = getSequelizeInstance(credentials.database)
 
 export const sync = (sequelize: Sequelize): T.Task<string> =>
   pipe(
