@@ -8,14 +8,16 @@ jobs:
     name: deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: npm install
-      uses: actions/npm@master
-      with:
-        args: install
-    - name: serverless deploy
-      uses: serverless/github-action@master
-      with:
-        args: deploy
-      env:
-        SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn install
+      - run: yarn test
+      - run: yarn lint
+      - run: yarn build
+      - uses: serverless/github-action@master
+        with:
+          args: deploy
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
