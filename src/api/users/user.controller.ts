@@ -2,12 +2,19 @@ import User from 'api/users/user.model'
 import UserService from 'api/users/user.service'
 import { Request, Response } from 'express'
 import * as E from 'fp-ts/lib/Either'
-import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as T from 'fp-ts/lib/Task'
 import * as TE from 'fp-ts/lib/TaskEither'
 import { Map } from 'immutable'
-import { CustomError, EndpointResult, isIdValid, sendResponse, sendStatus, StatusCode } from 'utils'
+import {
+  CustomError,
+  EndpointResult,
+  isIdValid,
+  sendResponse,
+  sendStatus,
+  StatusCode,
+  toResponseFromOption
+} from 'utils'
 
 export default class UserController {
   private static Instance: UserController
@@ -33,19 +40,10 @@ export default class UserController {
   }
 
   getUser(request: Request, response: Response): EndpointResult {
-    const toResponse = (user: O.Option<User>): void =>
-      pipe(
-        user,
-        O.fold(
-          () => sendResponse(response)(StatusCode.NotFound)({ message: 'User not found!' }),
-          sendResponse(response)(StatusCode.OK),
-        ),
-      )
-
     return pipe(
       TE.fromEither(isIdValid(request.params.id)),
       TE.chain(UserService.instance.getUser),
-      TE.map(toResponse),
+      TE.map(toResponseFromOption<User>(response)('User not found!')),
       TE.mapLeft(sendResponse(response)(StatusCode.BadRequest)),
       TE.fold(T.of, T.of),
     )()

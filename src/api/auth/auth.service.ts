@@ -17,7 +17,8 @@ export default class AuthService {
   private AuthHeader = 'Authorization'
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private constructor() { }
+  private constructor() {
+  }
 
   static get instance(): AuthService {
     if (!AuthService.Instance) {
@@ -31,8 +32,8 @@ export default class AuthService {
     return AuthService.Instance.AuthHeader
   }
 
-  private static comparePasswords(password: string, user: User): T.Task<boolean> {
-    return (): Promise<boolean> => compare(password, user.password)
+  private static comparePasswords(password: string): (user: User) => T.Task<boolean> {
+    return (user: User) => (): Promise<boolean> => compare(password, user.password)
   }
 
   private static generateToken(user: User): string {
@@ -44,7 +45,7 @@ export default class AuthService {
 
     const toResult = (password: string) => (user: User): TE.TaskEither<CustomError, Token> =>
       pipe(
-        AuthService.comparePasswords(password, user),
+        AuthService.comparePasswords(password)(user),
         T.map((isPasswordCorrect: boolean) => isPasswordCorrect
           ? E.right({ token: AuthService.generateToken(user) })
           : E.left(genericError)
