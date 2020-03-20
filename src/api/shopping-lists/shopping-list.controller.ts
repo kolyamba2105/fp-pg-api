@@ -75,7 +75,7 @@ export default class ShoppingListController {
         id: isIdValid(request.params.id),
       }),
       TE.fromEither,
-      TE.chain(options => ShoppingListService.instance.addItemToShoppingList({ ...options, ...request.body })),
+      TE.chain(options => ShoppingListService.instance.addItemToShoppingList({ ...options, dto: request.body })),
       TE.map(sendResponse<Item>(response)(StatusCode.OK)),
       TE.mapLeft(sendResponse<CustomError>(response)(StatusCode.BadRequest)),
       TE.fold(T.of, T.of),

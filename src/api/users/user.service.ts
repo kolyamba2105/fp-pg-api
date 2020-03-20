@@ -1,6 +1,6 @@
 import User, { UserAttributes } from 'api/users/user.model'
 import UserRepository from 'api/users/user.repository'
-import { genSalt, hash } from 'bcrypt'
+import { genSalt, hash } from 'bcryptjs'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as A from 'fp-ts/lib/ReadonlyArray'

@@ -1,7 +1,7 @@
 import { AuthCredentials, AuthPayload, Token } from 'api/auth/auth.payload'
 import User from 'api/users/user.model'
 import UserRepository from 'api/users/user.repository'
-import { compare } from 'bcrypt'
+import { compare } from 'bcryptjs'
 import credentials from 'credentials'
 import * as E from 'fp-ts/lib/Either'
 import * as O from 'fp-ts/lib/Option'

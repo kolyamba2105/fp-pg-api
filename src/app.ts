@@ -6,6 +6,7 @@ import { sequelize, sync } from 'db'
 import express from 'express'
 import { console } from 'fp-ts'
 import morgan from 'morgan'
+import serverless from 'serverless-http'
 
 const app = express()
 
@@ -19,6 +20,10 @@ app.use('/categories', categories)
 app.use('/shopping-lists', shoppingLists)
 app.use('/users', users)
 
-const port = process.env.PORT || 3000
+if (process.env.ENV !== 'sls') {
+  const port = process.env.PORT || 3000
 
-app.listen(port, console.log(`Listening on port ${port}...`))
+  app.listen(port, console.log(`Listening on port ${port}...`))
+}
+
+export const sls = serverless(app)
