@@ -17,4 +17,4 @@ Basic CI/CD pipeline is set in this project.
 
 ## Slack integration
 
-Whenever someting changes in this repo, a `Slack Notification` will be sent.
+Whenever someting changes in this repo, a `Slack notification` will be sent.
