@@ -14,20 +14,13 @@ provider:
     minimumCompressionSize: 1024
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
-    NODE_PATH:
-      ${env:NODE_PATH, file(./env.yml):NODE_PATH}
-    ENV:
-      ${env:ENV, file(./env.yml):ENV}
-    DATABASE_NAME:
-      ${env:DATABASE_NAME, file(./env.yml):DATABASE_NAME}
-    DATABASE_HOST:
-      ${env:DATABASE_HOST, file(./env.yml):DATABASE_HOST}
-    DATABASE_USERNAME:
-      ${env:DATABASE_USERNAME, file(./env.yml):DATABASE_USERNAME}
-    DATABASE_PASSWORD:
-      ${env:DATABASE_PASSWORD, file(./env.yml):DATABASE_PASSWORD}
-    AUTH_SECRET:
-      ${env:AUTH_SECRET, file(./env.yml):AUTH_SECRET}
+    NODE_PATH: ${param:NODE_PATH}
+    ENV: ${param:ENV}
+    DATABASE_NAME: ${param:DATABASE_NAME}
+    DATABASE_HOST: ${param:DATABASE_HOST}
+    DATABASE_USERNAME: ${param:DATABASE_USERNAME}
+    DATABASE_PASSWORD: ${param:DATABASE_PASSWORD}
+    AUTH_SECRET: ${param:AUTH_SECRET}
     
 functions:
   app:
