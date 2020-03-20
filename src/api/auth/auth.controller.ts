@@ -3,6 +3,7 @@ import AuthService from 'api/auth/auth.service'
 import User from 'api/users/user.model'
 import UserRepository from 'api/users/user.repository'
 import { NextFunction, Request, Response } from 'express'
+import { flow } from 'fp-ts/lib/function'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as T from 'fp-ts/lib/Task'
@@ -31,13 +32,12 @@ export default class AuthController {
   }
 
   verify(request: Request, response: Response, next: NextFunction): MiddlewareResult {
-    const toResult = (user: O.Option<User>): void =>
-      pipe(
-        user,
+    const toResult: (user: O.Option<User>) => void =
+      flow(
         O.fold(
           () => sendResponse<CustomError>(response)(StatusCode.BadRequest)({ message: 'User not found!' }),
           () => next(),
-        )
+        ),
       )
 
     return pipe(

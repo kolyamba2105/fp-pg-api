@@ -1,5 +1,7 @@
 import { Response } from 'express'
 import * as E from 'fp-ts/lib/Either'
+import { flow } from 'fp-ts/lib/function'
+import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as t from 'io-ts'
 
@@ -38,4 +40,12 @@ export const validateBody = <T>(decoder: (input: unknown) => t.Validation<T>) =>
   pipe(
     decoder(input),
     E.mapLeft(() => ({ message })),
+  )
+
+export const toResponseFromOption = <T>(response: Response) => (message: string): (option: O.Option<T>) => void =>
+  flow(
+    O.fold(
+      () => sendResponse(response)(StatusCode.NotFound)({ message }),
+      sendResponse(response)(StatusCode.OK),
+    ),
   )
