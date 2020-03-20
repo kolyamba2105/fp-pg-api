@@ -1,17 +1,16 @@
-## fp-pg-api
+# fp-pg-api
 A simple project for learning purposes only.
 
-### Prerequisites
-- Install [Docker](https://www.docker.com/products/docker-desktop)
+## Development environment setup
+- `touch .env.local`
+- `cp .env .env.local`
+- Set all environment variables
+- `yarn start`
 
-### `Docker` development environment setup
-- In `docker-compose.yml` file set environment variables for `app` and `postgres` services.
-- Run `docker-compose up` command to run this project.
-- Docker will restart `app` container whenever you make changes to any files in `src` directory.
-- To store data from database, create directory somewhere on your computer and specify it's path in `postgres -> volumes` as `path/on/your/computer`:`/var/lib/postgresql/data`.
+If you want to run this app with `Docker`, then run `docker build -t your-image-name .` -> `docker run -it -p 3000:3000 -v $(pwd):/app  your-image-name`.
 
-### `Local` development environment setup
-- You can run this project directly on your machine, if you have `Node.js 12.x` and `Postgres` installed.
-- Start `Postgres` service.
-- Create `.env` file in the root of the project directory and set corresponding environment variables (such as in `docker-compose.yml -> services -> app -> environment`).
-- Run `yarn start`.
+## CI/CD
+
+Basic CI/CD pipeline is set in this project.
+- `yarn test`, `yarn lint` and `yarn build` are run by GitHub Actions whenever a new `pull request` comes into `master` branch (check [this workflow](./.github/workflows/integrate.yml))
+- app is deployed to `AWS Lambda` every time a new commit is pushed into master branch (check [this workflow](./.github/workflows/deploy.yml)). It uses a predefined [Serverless action](https://github.com/marketplace/actions/serverless)
